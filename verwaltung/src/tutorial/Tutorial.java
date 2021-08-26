@@ -1,3 +1,9 @@
+package tutorial;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Tutorial {
     private String titel;
     private String name;
@@ -10,6 +16,24 @@ public class Tutorial {
         this.email = email;
         this.inhalt = inhalt;
     }
+
+    public void speichereAlsDatei () {
+        String dateiname = titel + "-";
+        String alphabet = "abcdefghijklmnopqrstuvxyz";
+
+        for (int i = 0; i < 5; i++) {
+            int zahl = (int) (Math.random() * 26);
+            dateiname += alphabet.charAt(zahl);
+        }
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(dateiname +".tutorial"));
+            writer.write(inhalt);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public String getTitel() {
         return titel;
