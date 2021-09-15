@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class Tutorial {
     private String titel;
-    private String name;
-    private String email;
+    private String name ="Darius Adrian";
+    private String email ="test@gmail.com";
     private String inhalt;
 
     public Tutorial(String titel, String name, String email, String inhalt) {
@@ -19,15 +19,18 @@ public class Tutorial {
 
     public void speichereAlsDatei () {
         String dateiname = titel + "-";
+        
+        String datei =  titel + "\n|*****|\n" + inhalt;
+
         String alphabet = "abcdefghijklmnopqrstuvxyz";
 
         for (int i = 0; i < 5; i++) {
-            int zahl = (int) (Math.random() * 26);
+            int zahl = (int) (Math.random() * 25);
             dateiname += alphabet.charAt(zahl);
         }
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(dateiname +".tutorial"));
-            writer.write(inhalt);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(dateiname + ".tutorial"));
+            writer.write(datei);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

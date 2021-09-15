@@ -18,10 +18,6 @@ import javax.swing.JTabbedPane;
 public class GUI extends JFrame {
 	public GUI() {
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
-		
-		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.5);
-		getContentPane().add(splitPane);
 	}
 
 	public static void main(String[] args) {

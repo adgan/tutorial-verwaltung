@@ -18,13 +18,13 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class EditorView extends JFrame {
+public class CreateView extends JFrame {
 	
 	private JTextField titleField;
 	private JTextArea contentArea;
 	
 // Ansicht zum Editieren von Tutorials
-    public EditorView() {
+    public CreateView() {
     	getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
     	
     	JPanel title = new JPanel();
@@ -78,19 +78,19 @@ public class EditorView extends JFrame {
     	JPanel panel = new JPanel();
     	content.add(panel);
     	
-    	JButton btnNeueSeite = new JButton("Neue Seite");
-    	btnNeueSeite.addActionListener(new ActionListener() {
+    	JButton btnNewButton = new JButton("Neue Seite");
+    	btnNewButton.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			String text = contentArea.getText();
-    			text += "\n|#####|\n";
-    			contentArea.setText(text);
+
+                
+
     		}
     	});
-    	btnNeueSeite.setFont(new Font("Tahoma", Font.PLAIN, 14));
-    	panel.add(btnNeueSeite);
+    	btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+    	panel.add(btnNewButton);
     	
-    	JButton btnSpeichern = new JButton("Speichern");
-    	btnSpeichern.addActionListener(new ActionListener() {
+    	JButton btnNewButton_1 = new JButton("Speichern");
+    	btnNewButton_1.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
 				
     			Tutorial currentTutorial = new Tutorial( titleField.getText() , "Testname", "tutorial.test@tutorial.test.de", contentArea.getText() );
@@ -98,8 +98,8 @@ public class EditorView extends JFrame {
 				currentTutorial.speichereAlsDatei();
     		}
     	});
-    	btnSpeichern.setFont(new Font("Tahoma", Font.PLAIN, 14));
-    	panel.add(btnSpeichern);
+    	btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+    	panel.add(btnNewButton_1);
         
 	}
 	public static void main(String[] args) {
