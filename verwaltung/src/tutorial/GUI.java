@@ -36,8 +36,8 @@ public class GUI extends JFrame {
 	}
 
 	private void init() {
-		setSize(500,500);
-		setTitle("GUI");
+		setSize(762,400);
+		setTitle("Tutorial Verwaltung");
 		
 		
 		
