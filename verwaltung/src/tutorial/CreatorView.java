@@ -18,20 +18,20 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class CreateView extends JFrame {
+public class CreatorView extends JFrame {
 	
 	private JTextField titleField;
 	private JTextArea contentArea;
 	
-// Ansicht zum Editieren von Tutorials
-    public CreateView() {
+// Ansicht zum Erstellen von Tutorials
+    public CreatorView() {
     	getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
     	
     	JPanel title = new JPanel();
     	getContentPane().add(title);
     	title.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
     	
-    	JLabel lblTutorialBearbeiten = new JLabel("Tutorial bearbeiten");
+    	JLabel lblTutorialBearbeiten = new JLabel("Anleitung erstellen");
     	lblTutorialBearbeiten.setHorizontalAlignment(SwingConstants.CENTER);
     	lblTutorialBearbeiten.setFont(new Font("Tahoma", Font.PLAIN, 19));
     	title.add(lblTutorialBearbeiten);
@@ -78,19 +78,19 @@ public class CreateView extends JFrame {
     	JPanel panel = new JPanel();
     	content.add(panel);
     	
-    	JButton btnNewButton = new JButton("Neue Seite");
-    	btnNewButton.addActionListener(new ActionListener() {
+    	JButton btnNeueSeite = new JButton("Neue Seite");
+    	btnNeueSeite.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-
-                
-
+				String text = contentArea.getText();
+    			text += "\n|#####|\n";
+    			contentArea.setText(text);
     		}
     	});
-    	btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-    	panel.add(btnNewButton);
+    	btnNeueSeite.setFont(new Font("Tahoma", Font.PLAIN, 14));
+    	panel.add(btnNeueSeite);
     	
-    	JButton btnNewButton_1 = new JButton("Speichern");
-    	btnNewButton_1.addActionListener(new ActionListener() {
+    	JButton btnSpeichern = new JButton("Speichern");
+    	btnSpeichern.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
 				
     			Tutorial currentTutorial = new Tutorial( titleField.getText() , "Testname", "tutorial.test@tutorial.test.de", contentArea.getText() );
@@ -98,28 +98,17 @@ public class CreateView extends JFrame {
 				currentTutorial.speichereAlsDatei();
     		}
     	});
-    	btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-    	panel.add(btnNewButton_1);
+    	btnSpeichern.setFont(new Font("Tahoma", Font.PLAIN, 14));
+    	panel.add(btnSpeichern);
         
-	}
-	public static void main(String[] args) {
-		EditorView test = new EditorView();
-		test.init();
-		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		test.setLocationRelativeTo(null);
-		test.setVisible(true);
-		
-		
-		
+    	init();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
 	private void init() {
 		setSize(762,400);
-		setTitle("Tutorial Verwaltung");
-		
-		
-		
-		
-		
+		setTitle("Erstelle eine Anleitung");
 	}
 }

@@ -20,6 +20,11 @@ import java.awt.event.ActionEvent;
 
 public class EditorView extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9039353202487879891L;
+	
 	private JTextField titleField;
 	private JTextArea contentArea;
 	
@@ -116,9 +121,6 @@ public class EditorView extends JFrame {
 	private void init() {
 		setSize(762,400);
 		setTitle("Tutorial Verwaltung");
-		
-		
-		
 		
 		
 	}
