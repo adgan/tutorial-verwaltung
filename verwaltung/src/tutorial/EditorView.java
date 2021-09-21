@@ -27,9 +27,12 @@ public class EditorView extends JFrame {
 	
 	private JTextField titleField;
 	private JTextArea contentArea;
+	private Tutorial tutorial;
 	
 // Ansicht zum Editieren von Tutorials
-    public EditorView() {
+    public EditorView(Tutorial tutorial) {
+    	this.tutorial = tutorial;
+    	
     	getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
     	
     	JPanel title = new JPanel();
@@ -49,7 +52,7 @@ public class EditorView extends JFrame {
 		content.add(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 5));
 		
-		titleField = new JTextField();
+		titleField = new JTextField(tutorial.getTitel());
 		titleField.setToolTipText("Titel der Anleitung");
 
 		titleField.addFocusListener(new FocusListener() {
@@ -78,6 +81,7 @@ public class EditorView extends JFrame {
     	panel_2.setLayout(new BorderLayout(20, 20));
 		
     	contentArea = new JTextArea();
+    	contentArea.setText(tutorial.getInhalt());
     	panel_2.add(contentArea);
     	
     	JPanel panel = new JPanel();
@@ -105,23 +109,17 @@ public class EditorView extends JFrame {
     	});
     	btnSpeichern.setFont(new Font("Tahoma", Font.PLAIN, 14));
     	panel.add(btnSpeichern);
+    	
+    	init();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setVisible(true);
         
 	}
-	public static void main(String[] args) {
-		EditorView test = new EditorView();
-		test.init();
-		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		test.setLocationRelativeTo(null);
-		test.setVisible(true);
-		
-		
-		
-	}
+
 
 	private void init() {
 		setSize(762,400);
-		setTitle("Tutorial Verwaltung");
-		
-		
+		setTitle("Ändere Anleitung");
 	}
 }

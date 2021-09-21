@@ -37,7 +37,7 @@ public class Tutorial {
                 if (index == 0) {
                     this.titel = zeile;
                 } else if (index == 1) {
-
+                
                 }
                 else {
                     text += zeile + "\n";
@@ -55,7 +55,7 @@ public class Tutorial {
     }
 
     public void speichereAlsDatei () {
-        if (this.dateiName == null) {
+        if (this.getDateiName() == null) {
 
             String alphabet = "abcdefghijklmnopqrstuvxyz";
 
@@ -67,8 +67,8 @@ public class Tutorial {
 
                 dateiname += alphabet.charAt(zahl);
             }
-
-            this.dateiName = dateiname;
+        	
+            this.setDateiName(dateiname);
         }
 
         String datei =  titel + "\n|*****|\n" + inhalt;
@@ -91,7 +91,7 @@ public class Tutorial {
     
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("./Tutorials/" + this.dateiName + ".tutorial"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./Tutorials/" + this.getDateiName() + ".tutorial"));
             writer.write(datei);
             writer.close();
         } catch (IOException e) {
@@ -136,4 +136,10 @@ public class Tutorial {
     public void setName(String name) {
         this.name = name;
     }
+	public String getDateiName() {
+		return dateiName;
+	}
+	public void setDateiName(String dateiName) {
+		this.dateiName = dateiName;
+	}
 }
