@@ -12,8 +12,8 @@ import java.nio.file.Paths;
 
 public class Tutorial {
     private String titel;
-    private String name ="Darius Adrian";
-    private String email ="test@gmail.com";
+    private String name = "Darius Adrian";
+    private String email = "test@gmail.com";
     private String dateiName;
     private String inhalt;
 
@@ -23,23 +23,26 @@ public class Tutorial {
         this.email = email;
         this.inhalt = inhalt;
     }
+
     public Tutorial() {
 
     }
 
-    public void leseAusDatei (File datei) {
+    // LeseDa
+    public void leseAusDatei(File datei) {
+        this.dateiName = datei.getName();
+        System.out.println(this.dateiName);
         try {
-        	BufferedReader reader = new BufferedReader(new FileReader(datei));
-        	String text = "";
+            BufferedReader reader = new BufferedReader(new FileReader(datei));
+            String text = "";
             String zeile = "";
             int index = 0;
-        	while((zeile = reader.readLine()) != null) {
+            while ((zeile = reader.readLine()) != null) {
                 if (index == 0) {
                     this.titel = zeile;
                 } else if (index == 1) {
-                
-                }
-                else {
+
+                } else {
                     text += zeile + "\n";
                 }
                 index++;
@@ -47,14 +50,12 @@ public class Tutorial {
             this.inhalt = text;
             reader.close();
 
-            //Titel einfügen
-            //Prüfen, ob neue Seite --> Neues Textfield (Variablen für Abstand erstellen)
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
-    public void speichereAlsDatei () {
+    public void speichereAlsDatei() {
         if (this.getDateiName() == null) {
 
             String alphabet = "abcdefghijklmnopqrstuvxyz";
@@ -67,38 +68,34 @@ public class Tutorial {
 
                 dateiname += alphabet.charAt(zahl);
             }
-        	
-            this.setDateiName(dateiname);
+
+            this.setDateiName(dateiname + ".tutorial");
         }
 
-        String datei =  titel + "\n|*****|\n" + inhalt;
-        
-        
+        String datei = titel + "\n|*****|\n" + inhalt;
+
         Path path = Paths.get("./Tutorials");
-        
+
         if (!Files.exists(path)) {
-        	try {
-				Files.createDirectory(path);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        	
-        	System.out.println("New Directory created !   "+ path);
+            try {
+                Files.createDirectory(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("New Directory created !   " + path);
         } else {
-        	System.out.println("Directory already exists");
+            System.out.println("Directory already exists");
         }
-    
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("./Tutorials/" + this.getDateiName() + ".tutorial"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./Tutorials/" + this.getDateiName()));
             writer.write(datei);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     public String[] listeSeiten() {
         String[] seiten = this.inhalt.split("|#####|");
@@ -136,10 +133,12 @@ public class Tutorial {
     public void setName(String name) {
         this.name = name;
     }
-	public String getDateiName() {
-		return dateiName;
-	}
-	public void setDateiName(String dateiName) {
-		this.dateiName = dateiName;
-	}
+
+    public String getDateiName() {
+        return dateiName;
+    }
+
+    public void setDateiName(String dateiName) {
+        this.dateiName = dateiName;
+    }
 }
