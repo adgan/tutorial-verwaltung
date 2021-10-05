@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JTextArea;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.util.Scanner;
 
 import javax.swing.Box;
@@ -35,6 +36,7 @@ public class TutorialView extends JFrame {
 		contentPanel = new JPanel();
 
 		JLabel titleLabel = new JLabel(tutorial.getTitel(), JLabel.CENTER);
+		titleLabel.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		titlePanel.add(titleLabel);
 
 		// Erstelle Scrollpane, damit man alles an Inhalt sehen kann
@@ -63,27 +65,18 @@ public class TutorialView extends JFrame {
 		setSize(762, 400);
 		setTitle("Anleitung: " + tutorial.getTitel());
 
-		String inhalt = tutorial.getInhalt();
+		String[] seiten = tutorial.listeSeiten();
 
-		// Für jede Zeile vom Tutorial wird
-		Scanner scanner = new Scanner(inhalt);
-		while (scanner.hasNextLine()) {
+		for (String seite : seiten) {
+			JTextArea test = new JTextArea(seite);
+			test.setLineWrap(true);
+			test.setWrapStyleWord(false);
+			test.setEditable(false);
+			test.setDisabledTextColor(Color.black);
+			contentPanel.add(test);
 
-			String zeile = scanner.nextLine();
+			contentPanel.add(Box.createVerticalStrut(20));
 
-			// Wenn "|#####|" eingebaut sind, erstelle einen Platzhalter
-			// ansonsten erstelle TextArea mit Inhalt
-			if (zeile.contains("|#####|")) {
-				contentPanel.add(Box.createVerticalStrut(20));
-			} else {
-				JTextArea test = new JTextArea(zeile);
-				test.setLineWrap(true);
-				test.setWrapStyleWord(true);
-				test.setEditable(false);
-				test.setDisabledTextColor(Color.black);
-				contentPanel.add(test);
-			}
 		}
-		scanner.close();
 	}
 }

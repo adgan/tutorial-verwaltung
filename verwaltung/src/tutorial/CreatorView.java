@@ -15,8 +15,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.swing.SwingConstants;
+
 import javax.swing.JTextArea;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -114,7 +117,7 @@ public class CreatorView extends JFrame {
 		btnNeueSeite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String text = contentArea.getText();
-				text += "\n|#####|\n";
+				text += "\n#####\n";
 				contentArea.setText(text);
 			}
 		});
@@ -125,24 +128,48 @@ public class CreatorView extends JFrame {
 		JButton btnSpeichern = new JButton("Speichern");
 		btnSpeichern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				
+				String password = (String)JOptionPane.showInputDialog(
+	                    null,
+	                    "Setze ein Passwort\n" +
+	                    "zum Oeffnen und Bearbeiten",
+	                    null,
+	                    JOptionPane.PLAIN_MESSAGE,
+	                    null,
+						null,
+						"");
+				
+				Tutorial currentTutorial = new Tutorial();
+				try {
+					currentTutorial.setzeSecret(password);
+				} catch (UnsupportedEncodingException e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				} catch (NoSuchAlgorithmException e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}				
+				
+				
+				
 				int titleExists = checkIfTitleExists(titleField.getText());
 
 				switch (titleExists) {
-					// Titel existiert und wird �berschrieben
+					// Titel existiert und wird ueberschrieben
 					case 0:
-						Tutorial currentTutorial = new Tutorial(titleField.getText(), "Testname",
-								"tutorial.test@tutorial.test.de", contentArea.getText());
+						currentTutorial.setTitel(titleField.getText());
+						currentTutorial.setInhalt(contentArea.getText());
 
 						currentTutorial.setDateiName(getFileName(titleField.getText()));
 
 						currentTutorial.speichereAlsDatei();
 						break;
-					// Titel existiert nicht oder existiert, wird aber nicht �berschrieben
-
+						
+					// Titel existiert oder wurde abgebrochen, wird nicht ueberschrieben
 					default:
 						break;
 				}
+				
 
 			}
 		});
@@ -159,7 +186,8 @@ public class CreatorView extends JFrame {
 		setSize(762, 400);
 		setTitle("Erstelle eine Anleitung");
 	}
-
+	
+	
 	// Methode um alle Dateinamen auszugeben
 	private String getFileName(String title) {
 		// Erstellt den Ordner --> file sind Dateien und Ordner in java
@@ -214,13 +242,14 @@ public class CreatorView extends JFrame {
 			if (title.equals(tutorialName)) {
 				System.out.println("Tutorial existiert bereits unter diesem Titel");
 				// Auswahl für den Benutzer, ob Überschreiben oder abbrechen
-				Object[] options = { "\u00d6berschreiben", "Abbrechen" };
+				Object[] options = { "\u00dcberschreiben", "Abbrechen" };
 				//
 				result = JOptionPane.showOptionDialog(null, "Die Anleitung existiert bereits.", "Trotzdem speichern",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				System.out.println(result);
+				break;
 			}
-			break;
+			
 		}
 
 		// 0 ist speichern, 1 und -1 ist abbrechen

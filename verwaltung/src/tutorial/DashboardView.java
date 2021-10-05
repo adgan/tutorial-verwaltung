@@ -6,6 +6,8 @@ import javax.swing.JSplitPane;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Dimension;
 
 import java.awt.FlowLayout;
@@ -17,10 +19,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -148,6 +152,176 @@ public class DashboardView extends JFrame {
 
 	}
 
+
+	private JPanel erstelleTutorialKarte(Tutorial tutorial, String path) {
+		JPanel tutorialKarte = new JPanel();
+		tutorialKarte.setLayout(new BoxLayout(tutorialKarte, BoxLayout.X_AXIS));
+
+		JSplitPane card = new JSplitPane();
+		card.setDividerSize(0);
+		card.setEnabled(false);
+		card.setResizeWeight(0.9);
+		tutorialKarte.add(card);
+
+		JPanel panel = new JPanel();
+		card.setLeftComponent(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+		JLabel lblNewLabel = new JLabel(tutorial.getTitel(), JLabel.CENTER);
+		panel.add(lblNewLabel);
+
+		JPanel panel_1 = new JPanel();
+		card.setRightComponent(panel_1);
+		panel_1.setLayout(new GridLayout(3, 1, 0, 0));
+
+		JButton btnOeffnen = new JButton("\u00d6ffnen");
+		btnOeffnen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Paswort Eingabefeld beim öffnen
+				String password = (String)JOptionPane.showInputDialog(
+	                    null,
+	                    "Passwort für die Anleitung\n",
+	                    null,
+	                    JOptionPane.PLAIN_MESSAGE,
+	                    null,
+						null,
+						"");
+						
+
+				try {
+					//Passwort wird erstellt
+					tutorial.setzeSecret(password);
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (NoSuchAlgorithmException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					//Tutorial wird entschluesselt
+					tutorial.entschluesseln();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Passwort falsch");
+
+					JOptionPane.showMessageDialog(null,
+							    "Passwort falsch eingegeben.",
+							    "Passwort falsch",
+							    JOptionPane.ERROR_MESSAGE);
+				}
+				
+				new TutorialView(tutorial);
+			}
+		});
+		panel_1.add(btnOeffnen);
+
+		JButton btnEdit = new JButton("Bearbeiten");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (tutorial.getVerschluesselt() == true) {
+					//Passwort wird erstellt
+					String password = (String)JOptionPane.showInputDialog(
+		                    null,
+		                    "Passwort zum Bearbeiten\n",
+		                    null,
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+							null,
+							"");
+							
+
+					try {
+						
+						tutorial.setzeSecret(password);
+					} catch (UnsupportedEncodingException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (NoSuchAlgorithmException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						//Tutorial wird entschluesselt
+						tutorial.entschluesseln();
+						
+						new EditorView(tutorial);
+
+					} catch (Exception e1) {
+						System.out.println("Passwort falsch");
+						
+						JOptionPane.showMessageDialog(null,
+							    "Passwort falsch eingegeben.",
+							    "Passwort falsch",
+							    JOptionPane.ERROR_MESSAGE);
+						
+						// TODO Auto-generated catch block
+					}
+				} else {
+					new EditorView(tutorial);
+				}
+			
+				
+		}
+		});
+		panel_1.add(btnEdit);
+
+		JButton btnDelete = new JButton("Entfernen");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Wenn es noch verschlüsselt ist, wird eine Abfrage fürs Passwort aufgerufen
+				if (tutorial.getVerschluesselt() == true) {
+					String password = (String)JOptionPane.showInputDialog(
+		                    null,
+		                    "Passwort zum Bearbeiten\n",
+		                    null,
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+							null,
+							"");
+							
+
+					try {
+						tutorial.setzeSecret(password);
+					} catch (UnsupportedEncodingException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (NoSuchAlgorithmException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						//Es wird entschlüsselt und anschließend gelöscht
+						tutorial.entschluesseln();
+						
+						delete(path);
+						listeTutorials();
+
+					} catch (Exception e1) {
+						System.out.println("Passwort falsch");
+						
+						JOptionPane.showMessageDialog(null,
+							    "Passwort falsch eingegeben.",
+							    "Insane error",
+							    JOptionPane.ERROR_MESSAGE);
+						
+						// TODO Auto-generated catch block
+					}
+				} else {
+					delete(path);
+					listeTutorials();
+				}
+				
+			
+			}
+		});
+		panel_1.add(btnDelete);
+
+		return tutorialKarte;
+	}
+
+
 	// Die Tutorials werden aufgelistet
 	public void listeTutorials() {
 		// Erstellt den Ordner --> file sind Dateien und Ordner in java
@@ -170,54 +344,11 @@ public class DashboardView extends JFrame {
 		// eingefügt
 		for (File datei : dateien) {
 			Tutorial tutorial = new Tutorial();
+		
 			// DIe Informationen werden aus der Datei ausgelesen
 			tutorial.leseAusDatei(datei);
 
-			panelListe[index] = new JPanel();
-			panelListe[index].setLayout(new BoxLayout(panelListe[index], BoxLayout.X_AXIS));
-
-			JSplitPane card = new JSplitPane();
-			card.setDividerSize(0);
-			card.setEnabled(false);
-			card.setResizeWeight(0.9);
-			panelListe[index].add(card);
-
-			JPanel panel = new JPanel();
-			card.setLeftComponent(panel);
-			panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-
-			JLabel lblNewLabel = new JLabel(tutorial.getTitel(), JLabel.CENTER);
-			panel.add(lblNewLabel);
-
-			JPanel panel_1 = new JPanel();
-			card.setRightComponent(panel_1);
-			panel_1.setLayout(new GridLayout(3, 1, 0, 0));
-
-			JButton btnOeffnen = new JButton("\u00d6ffnen");
-			btnOeffnen.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					new TutorialView(tutorial);
-				}
-			});
-			panel_1.add(btnOeffnen);
-
-			JButton btnEdit = new JButton("Bearbeiten");
-			btnEdit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					new EditorView(tutorial);
-
-				}
-			});
-			panel_1.add(btnEdit);
-
-			JButton btnDelete = new JButton("Entfernen");
-			btnDelete.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					delete(datei.getPath());
-					listeTutorials();
-				}
-			});
-			panel_1.add(btnDelete);
+			panelListe[index] = erstelleTutorialKarte(tutorial, datei.getPath());
 
 			dateienUebersichtListe.add(panelListe[index]);
 			index = index + 1;

@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
@@ -107,7 +109,7 @@ public class EditorView extends JFrame {
 		btnNeueSeite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String text = contentTextArea.getText();
-				text += "\n|#####|\n";
+				text += "\n#####\n";
 				contentTextArea.setText(text);
 			}
 		});
@@ -120,8 +122,17 @@ public class EditorView extends JFrame {
 		btnSpeichern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				Tutorial currentTutorial = new Tutorial(titleField.getText(), "Testname",
-						"tutorial.test@tutorial.test.de", contentTextArea.getText());
+				Tutorial currentTutorial = null;
+				try {
+					currentTutorial = new Tutorial(titleField.getText(), "Testname",
+							"tutorial.test@tutorial.test.de", contentTextArea.getText());
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (NoSuchAlgorithmException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 				currentTutorial.setDateiName(tutorial.getDateiName());
 
